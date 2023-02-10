@@ -2,6 +2,7 @@ from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
 from tqdm import tqdm
 import time
+import constants
 
 
 class conexionMongo:
@@ -10,7 +11,7 @@ class conexionMongo:
         self.MONGO_COLECCION = nombrecoleccion
         self.validarConexion = True
         try:
-            uri = 'mongodb+srv://admin:admin@class1.oh3xtlw.mongodb.net/?retryWrites=true&w=majority'
+            uri = constants.URI
             connect = MongoClient(uri)
             basasedatos = connect[self.MONGO_DATABASE] 
             self.coleccion = basasedatos[self.MONGO_COLECCION]
