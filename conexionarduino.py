@@ -1,4 +1,4 @@
-import serail 
+import serial
 import time
 import constants
 
