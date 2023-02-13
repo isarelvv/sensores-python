@@ -14,6 +14,7 @@ class Menu:
             print("6.- Sensor 6")
             print("7.- Cambiar tiempo de respuesta")
             print("8.- Salir")
+            
             opcion = input("Opcion: ")
             if opcion == 1:
                 print("Sensor 1")
