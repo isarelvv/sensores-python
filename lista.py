@@ -3,7 +3,7 @@ from jsonclass import Conversion
 
 class Lista(Conversion):
     def __init__(self):
-        self.lista = []
+        self.lista = []  
         self.tamanho = 0
         super().__init__()
 
