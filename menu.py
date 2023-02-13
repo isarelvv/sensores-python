@@ -1,7 +1,8 @@
 class Menu:
-
     def __init__(self):
         pass
+    
+        
 
     def Inicio(self):
         while True:
@@ -14,7 +15,6 @@ class Menu:
             print("6.- Sensor 6")
             print("7.- Cambiar tiempo de respuesta")
             print("8.- Salir")
-            
             opcion = input("Opcion: ")
             if opcion == 1:
                 print("Sensor 1")
@@ -29,9 +29,11 @@ class Menu:
             elif opcion == 6:
                 print("Sensor 6")
             elif opcion == 7:
-                print("Cambiar tiempo de respuesta")
-            elif opcion == 8:
-                print("Saliendo...")
+                print("Todos los sensores")
+            elif opcion == 9:
+                print("Modificar tiempo de respuesta")
+            elif opcion == 0:
+                print("Salir")
                 break
 
 

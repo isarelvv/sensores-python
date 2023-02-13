@@ -2,7 +2,6 @@ import serial
 import time
 import constants
 
-
 class conexionArduino:
     def __init__(self):
         arduino = serial.Serial(constants.PUERTO, constants.NUMERO)
