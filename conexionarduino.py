@@ -1,9 +1,9 @@
-import serail 
+import serial
 import time
 import constants
 
 
-Class conexionArduino:
+class conexionArduino:
     def __init__(self):
         arduino = serial.Serial(constants.PUERTO, constants.NUMERO)
         time.sleep(2)
