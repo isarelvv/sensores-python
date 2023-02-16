@@ -3,9 +3,9 @@ import time
 from constans import Constans
 
 class conexionArduino:
-#INICILIAR LA CONEZCION CON EL ARDUINO
+#INICILIAR LA CONEXION CON EL ARDUINO
     def __init__(self):
-        self.arduino = serial.Serial(Constans.PUERTO,Constans.NUMERO)
+        self.arduino = serial.Serial(port=Constans.PUERTO,baudrate=Constans.NUMERO)
         time.sleep(2)
 
 #METODO PARA LEER LOS DATOS DEL ARDUINO

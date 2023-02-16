@@ -62,7 +62,7 @@ class conexionMongo(Conversion):
                 #SI TIENE CONTENIDO, INTENTAR GUARDARLO EN MONGOD
                 self.coleccion.insert_many(docDesconectado)
                 #LIMPIAR EL ARCHIVO SIN CONEXION
-                self.guardarjson('sensoresOffline',[])
+                os.remove('sensoresOffline.json')
             self.insertarDocumento(dict.get_dict())           
         else:
             print("No se logro conectar con MongoDB, guardando localmente")
