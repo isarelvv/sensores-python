@@ -2,18 +2,21 @@ from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
 from tqdm import tqdm
 import time
-import constants
+import constans
+from jsonclass import Conversion
+import sensores
+import os
 
-
-class conexionMongo:
+class conexionMongo(Conversion):
     #INICIALIZAR LA CONEXION CON MONGODB
     def __init__(self,nombrecoleccion):
-        self.MONGO_DATABASE = 'tienda'
-        self.MONGO_COLECCION = nombrecoleccion
+        self.lista = sensores.sensor()
+        self.MONGO_DATABASE = constans.Constans.MONGO_DATABASE
+        self.MONGO_COLECCION = constans.Constans.MONGO_COLECCION
         self.validarConexion = True
         try:
             #PROBAR LA CONEZION CON MONGODB
-            uri = constants.URI
+            uri = constans.URI
             connect = MongoClient(uri)
             basasedatos = connect[self.MONGO_DATABASE] 
             self.coleccion = basasedatos[self.MONGO_COLECCION]
@@ -49,6 +52,36 @@ class conexionMongo:
             self.insertarDocumento(documento)
         else:
             print("El codigo ya existe")
+
+#METODO PARA INTENTAR GUARDAR EL SENSOR EN MONGODB
+    def insertarAMongo(self,dict):
+        if self.validarConexion==True:
+            #VERIFICAR SI EL ARCHIVO SIN CONEXION TIENE CONTENIDO
+            docDesconectado = self.leerjson('sensoresOffline')
+            if len(docDesconectado) > 0:
+                #SI TIENE CONTENIDO, INTENTAR GUARDARLO EN MONGOD
+                self.coleccion.insert_many(docDesconectado)
+                #LIMPIAR EL ARCHIVO SIN CONEXION
+                self.guardarjson('sensoresOffline',[])
+            self.insertarDocumento(dict.get_dict())           
+        else:
+            print("No se logro conectar con MongoDB, guardando localmente")
+            self.guardarEnLocal(dict)
+
+
+#METODO PARA GUARDAR SIN CONEXION
+    def guardarEnLocal(self,data):
+        try:
+            lista = self.lista.conversionlista()
+            print(lista)
+            lista.insere(data)
+            os.remove('sensoresOffline.json')
+            self.agregarContenido('sensoresOffline',lista.get_dict())
+        except:
+            self.lista.insere(data)
+            self.agregarContenido('sensoresOffline',self.lista.get_dict())
+        
+
 
 
 #PROBANDO LA CLASE

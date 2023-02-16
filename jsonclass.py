@@ -15,3 +15,14 @@ class Conversion:
         jsondum = json.load(f)
         f.close()
         return jsondum 
+    
+    def agregarContenido(self,nombre,contenido):
+        nombrec=nombre+".json"
+        data = json.dumps(contenido,indent=4)
+        f=open(nombrec,"a")
+        f.write(data)
+        f.close()
+
+if __name__ == "__main__":
+    json1 =  Conversion()
+    print(json1.leerjson("sensoresOffline"))
