@@ -38,6 +38,6 @@ class sensor(Lista):
             self.insere(sensor)
         return self.lista
 
-#FUNCION PARA SACAR LA LLAVE DE BUSQUEDA EN LA BASE DE DATOS
+#FUNCION PARA SACAR LA LLAVE DE BUSQUEDA EN LA BASE DE DATOS 
     def getKeys(self):
         return self.identificador

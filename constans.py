@@ -1,15 +1,24 @@
-#ARDUINO CONSTATNS
 
-PUERTO = 'COM4'
-NUMERO = 9600
+class Constans:
 
-#MONGO CONSTANTS
+    __slots__ = ()
+    #ARDUINO CONSTATNS
+    PUERTO = 'COM7'
+    NUMERO = 9600
 
-URI = 'mongodb+srv://admin:admin@class1.oh3xtlw.mongodb.net/?retryWrites=true&w=majority'
-MONGO_DATABASE = 'python'
-MONGO_COLECCION = 'sensores'
+    #MONGO CONSTANTS
 
-#JSON CONSTANTS
+    URI = 'mongodb+srv://admin:admin@class1.oh3xtlw.mongodb.net/?retryWrites=true&w=majority'
+    MONGO_DATABASE = 'python'
+    MONGO_COLECCION = 'sensores'
 
-JSON_FILE = 'sensores'
+    #JSON CONSTANTS
+
+    JSON_FILE = 'sensores'
+
+    #TIEMPO DE RESPUESTA
+
+    TIEMPO_CONEXION = (5)
+    TIEMPO_SIN_CONEXION = (10)
+    TIEMPO_LECTURA_ARDUINO = (2)
  
