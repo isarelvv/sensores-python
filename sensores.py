@@ -1,9 +1,9 @@
 from lista import Lista
-
+import mongodb
 # Description: Clase sensor
 class sensor(Lista):
     #INICIALIZAR LOS VALORES DE LA CLASE
-    def __init__(self, tipo, identificador, valor):
+    def __init__(self, tipo="N/A", identificador="N/A", valor="N/A"):
         self.tipo = tipo
         self.identificador = identificador
         self.valor = valor
@@ -31,13 +31,25 @@ class sensor(Lista):
 
 #FUNCION PARA CONVERTIR UN UN JSON A UN LISTA
     def conversionlista(self):
-        self.lista = []
-        li = self.leerjson('sensores')
+        lista = sensor()
+        li = self.leerjson('sensoresOffline')
         for val in li:
-            sensor = sensor(val['tipo'], val['identificador'], val['valor'])
-            self.insere(sensor)
-        return self.lista
+            sensorx = sensor(val['tipo'], val['identificador'], val['valor'])
+            lista.insere(sensorx)
+        return lista
 
 #FUNCION PARA SACAR LA LLAVE DE BUSQUEDA EN LA BASE DE DATOS 
     def getKeys(self):
         return self.identificador
+
+#FUNCION PARA MANDAR EL SENSOR A MONGO
+    def sendMongo(self,sensor):
+        mongoHelper = mongodb.conexionMongo("sensores")
+        mongoHelper.insertarAMongo(sensor)
+
+
+if __name__ == "__main__":
+    sensor1 = sensor("temperatura", "T5", "30")
+    sensor1.sendMongo(sensor1)
+        
+

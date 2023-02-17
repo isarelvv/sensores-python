@@ -11,6 +11,7 @@ class Lista(Conversion):
     def insere(self, elemento):
         self.lista.append(elemento)
         self.tamanho += 1
+        
     def remover(self, elemento):
         self.lista.remove(self.buscar(elemento))
         self.tamanho -= 1
