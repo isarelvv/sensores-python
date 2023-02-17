@@ -10,8 +10,9 @@ class conexionArduino:
 
 #METODO PARA LEER LOS DATOS DEL ARDUINO
     def leerArduino(self):
-        valores=self.arduino.readline()
-        return valores.decode("utf-8")
+        while(True):
+            valores=self.arduino.readline()
+            return valores.decode("utf-8")
 
 #METODO PARA ESCRIBIR EN EL IDENTIFICADOR DEL ARDUINO
     def escribirArduino(self, valor):
