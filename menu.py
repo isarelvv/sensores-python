@@ -2,6 +2,8 @@ class Menu:
     def __init__(self):
         pass
     
+    def Sensor1(self):
+        print("Sensor 1")
         
 
     def Inicio(self):

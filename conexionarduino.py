@@ -5,15 +5,18 @@ from constans import Constans
 class conexionArduino:
 #INICILIAR LA CONEZCION CON EL ARDUINO
     def __init__(self):
-        self.arduino = serial.Serial(Constans.PUERTO,Constans.NUMERO)
+        self.arduino = serial.Serial(Constans.PUERTO,Constans.NUMERO, timeout=Constans.TIEMPO_LECTURA_ARDUINO)
         time.sleep(2)
 
 #METODO PARA LEER LOS DATOS DEL ARDUINO
     def leerArduino(self):
         valores=self.arduino.readline()
-        return valores.decode("utf-8").strip()
+        return valores.decode("utf-8")
 
-#METODO PARA ESCRIBIR EN EL ARDUINO
+#METODO PARA ESCRIBIR EN EL IDENTIFICADOR DEL ARDUINO
+    def escribirArduino(self, valor):
+        self.arduino.write(valor.encode())
+        time.sleep(1)
 
 #METODO PARA CERRAR LA CONEXION CON EL ARDUINO
     def cerrarConexion(self):
@@ -23,6 +26,7 @@ class conexionArduino:
 
 if __name__ == "__main__":
     conexion = conexionArduino()
-    imprimir = conexion.leerArduino()
-    print(imprimir)
-
+    while(True):
+        imprimir = conexion.leerArduino()
+        print(imprimir)
+        conexion.escribirArduino("1")

@@ -20,5 +20,5 @@ class Constans:
 
     TIEMPO_CONEXION = (5)
     TIEMPO_SIN_CONEXION = (10)
-    TIEMPO_LECTURA_ARDUINO = (2)
+    TIEMPO_LECTURA_ARDUINO = (3)
  
