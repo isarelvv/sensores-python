@@ -2,19 +2,27 @@ from sensores import sensor
 from conexionarduino import conexionArduino
 class Menu:
     def __init__(self):
+        #INICIALIZAR LA CONEXION CON EL ARDUINO
         self.con = conexionArduino()
+
+#METODO PARA PEDIR EL IDENTIFICADOR DEL SENSOR
+    def pedirIdentificador(self):
+        identificador = input("Identificador: ")
+        return identificador
     
-<<<<<<< HEAD
-    def Sensor1(self):
-        print("Sensor 1")
-        
-=======
+#METODO QUE REALIZAR EL LLAMADO DE LOS DEMAS METODOS
+    def Sensor(self,tipo):
+        print("Sensor")
+        id = self.pedirIdentificador()
+        self.escribirArduino(id)
+        self.leerDatos(tipo,id)
+                
+#METODO PARA ESTRAER EL DATO DEL VALOR Y ENVIARLO A MONGO 
     def leerDatos(self,tipo,id):
         data = self.con.leerArduino()
         sensor1 = sensor(tipo,id,data)
         sensor1.sendMongo(sensor1)
 
->>>>>>> c871cc50c5fb2ad765794fa6bf3193ce4c598d4e
 
     def Inicio(self):
         while True:
@@ -29,17 +37,30 @@ class Menu:
             print("8.- Salir")
             opcion = input("Opcion: ")
             if opcion == 1:
-                self.leerDatos("Temperatura","TH1")
+               # self.leerDatos("Temperatura","TH1")
+                tipo = "Temperatura"
+                self.Sensor(tipo)
             elif opcion == 2:
-                self.leerDatos("Humedad","HU1")
+                #self.leerDatos("Humedad","HU1")
+                tipo = "Humedad"
+                self.Sensor(tipo)
             elif opcion == 3:
-                self.leerDatos("UltraSonico","US1")
+                #self.leerDatos("UltraSonico","US1")
+                tipo = "UltraSonico"
+                self.Sensor(tipo)
+
             elif opcion == 4:
-                self.leerDatos("Luz","LZ1")
+                #self.leerDatos("Luz","LZ1")
+                tipo = "Luz"
+                self.Sensor(tipo)
             elif opcion == 5:
-                self.leerDatos("Movimiento","MV1")
+                #self.leerDatos("Movimiento","MV1")
+                tipo = "Movimiento"
+                self.Sensor(tipo)
             elif opcion == 6:
-                self.leerDatos("Sonido","SD1")
+                #self.leerDatos("Sonido","SD1")
+                tipo = "Sonido"
+                self.Sensor(tipo)
             elif opcion == 7:
                 print("Todos los sensores")
             elif opcion == 9:
