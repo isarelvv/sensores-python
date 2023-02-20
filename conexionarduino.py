@@ -14,8 +14,9 @@ class conexionArduino:
 
 #METODO PARA LEER LOS DATOS DEL ARDUINO
     def leerArduino(self):
-        valores=self.arduino.readline()
-        return valores.decode("utf-8").strip()
+        while(True):
+            valores=self.arduino.readline()
+            return valores.decode("utf-8")
 
 #METODO PARA ESCRIBIR EN EL ARDUINO
     def escribirArduino(self, mensaje):
@@ -53,7 +54,8 @@ class conexionArduino:
 
 if __name__ == "__main__":
     conexion = conexionArduino()
-    conexion.readBienvenida()
+    while(True):
+        conexion.readBienvenida()
     data = "TH"
 
 
@@ -64,9 +66,9 @@ if __name__ == "__main__":
     
     #while True:
         #data = conexion.leerArduino()
-        #print(data)
+            #print(data)
         #conexion.escribirArduino("TH")
         
 
         
-
+        #conexion.escribirArduino("1")

@@ -3,6 +3,7 @@ from conexionarduino import conexionArduino
 
 class Menu:
     def __init__(self):
+        #INICIALIZAR LA CONEXION CON EL ARDUINO
         self.con = conexionArduino()
         
     def Inicio(self):
