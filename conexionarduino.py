@@ -27,7 +27,12 @@ class conexionArduino:
         self.arduino.close()
 
     def llamarArduino(self):
-        data = self.arduino.read_all()     
+        while True:
+            data = self.arduino.read_all()
+            if data ==b'Esperando...':
+                print("skip")
+                break
+
         while True:
             data = self.arduino.read_until()
             print(data.decode("utf-8").strip())
@@ -39,24 +44,22 @@ class conexionArduino:
         
     def readSensor(self,id,tipo,identificador):
         self.escribirArduino(id.encode("utf-8"))
+        data2 = self.arduino.read_until(b'Esperando...')
         while True:
             data2 = self.arduino.read_until()
-            if data2 == b'':
-                break
             sensor1 = sensor(tipo, identificador, data2.decode("utf-8").strip())
             print(sensor1)
             self.mongo.insertarAMongo(sensor1)
             if msvcrt.kbhit():
-                break
+                    break
+        
             
 
     
 
 if __name__ == "__main__":
     conexion = conexionArduino()
-    while(True):
-        conexion.readBienvenida()
-    data = "TH"
+    conexion.readSensor("TH","Temperatura","T1")
 
 
             

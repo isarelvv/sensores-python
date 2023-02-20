@@ -1,6 +1,7 @@
 from sensores import sensor
 from conexionarduino import conexionArduino
 
+
 class Menu:
     def __init__(self):
         #INICIALIZAR LA CONEXION CON EL ARDUINO
@@ -42,6 +43,7 @@ if __name__ == "__main__":
             menu.con.readSensor("AGUA","Agua","A1")
         elif opcion == "7":
             print("Todos los sensores")
+            
         elif opcion == "8":
             print("Modificar tiempo de respuesta")
         elif opcion == "9":

@@ -31,13 +31,12 @@ class sensor(Lista):
             return diccionario
 
 #FUNCION PARA CONVERTIR UN UN JSON A UN LISTA
-    def conversionlista(self):
-        lista = sensor()
-        li = self.leerjson('sensoresOffline')
+    def conversionlista(self,arch,list):
+        li = self.leerjson(arch)
         for val in li:
             sensorx = sensor(val['tipo'], val['identificador'], val['valor'])
-            lista.insere(sensorx)
-        return lista
+            list.insere(sensorx)
+    
 
 #FUNCION PARA SACAR LA LLAVE DE BUSQUEDA EN LA BASE DE DATOS 
     def getKeys(self):

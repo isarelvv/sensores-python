@@ -6,11 +6,13 @@ import constans
 from jsonclass import Conversion
 import sensores
 import os
+import threading
 
 class conexionMongo(Conversion):
     #INICIALIZAR LA CONEXION CON MONGODB
     def __init__(self,nombrecoleccion):
-        self.lista = sensores.sensor()
+        self.listatemporal = sensores.sensor()
+        self.listaoffline = sensores.sensor()
         self.URI = constans.Constans.URI
         self.MONGO_DATABASE = constans.Constans.MONGO_DATABASE
         self.MONGO_COLECCION = constans.Constans.MONGO_COLECCION
@@ -25,6 +27,8 @@ class conexionMongo(Conversion):
                 for i in range(10):
                     time.sleep(0.1)
                     pbar.update(10)
+            self.segundoplano = threading.Thread(target=self.eliminarJSONTemporal)
+            self.segundoplano.start()
         except:
             #SI NO SE PUEDE CONECTAR CON MONGODB
             print("No se logro conectar con MongoDB")
@@ -57,13 +61,14 @@ class conexionMongo(Conversion):
     def insertarAMongo(self,dict):
         if self.validarConexion==True:
             #VERIFICAR SI EL ARCHIVO SIN CONEXION TIENE CONTENIDO
-            docDesconectado = self.leerjson('sensoresOffline')
-            if len(docDesconectado) > 0:
+            if os.path.exists('sensoresOffline.json'):
+                docDesconectado = self.leerjson('sensoresOffline')
                 #SI TIENE CONTENIDO, INTENTAR GUARDARLO EN MONGOD
                 self.coleccion.insert_many(docDesconectado)
                 #LIMPIAR EL ARCHIVO SIN CONEXION
                 os.remove('sensoresOffline.json')
-            self.insertarDocumento(dict.get_dict())           
+            self.guardarJSONTemporal(dict)
+            #self.insertarDocumento(dict.get_dict())           
         else:
             print("No se logro conectar con MongoDB, guardando localmente")
             self.guardarEnLocal(dict)
@@ -71,15 +76,24 @@ class conexionMongo(Conversion):
 
 #METODO PARA GUARDAR SIN CONEXION
     def guardarEnLocal(self,data):
-        try:
-            lista = self.lista.conversionlista()
-            print(lista)
-            lista.insere(data)
-            os.remove('sensoresOffline.json')
-            self.agregarContenido('sensoresOffline',lista.get_dict())
-        except:
-            self.lista.insere(data)
-            self.agregarContenido('sensoresOffline',self.lista.get_dict())
+        self.listaoffline.insere(data)
+        self.guardarjson('sensoresOffline',self.listaoffline.get_dict())
+        
+    
+    
+    def guardarJSONTemporal(self,dict):
+        self.listatemporal.insere(dict)
+        self.guardarjson('sensoresTemporales',self.listatemporal.get_dict())
+
+
+    def eliminarJSONTemporal(self):
+        time.sleep(15)
+        self.listatemporal = sensores.sensor()
+        os.remove('sensoresTemporales.json')
+    
+
+        
+        
         
 
 
@@ -87,5 +101,5 @@ class conexionMongo(Conversion):
 #PROBANDO LA CLASE
 if __name__ == "__main__":
     conexion = conexionMongo("sensores")
-    #conexion.insertarDocumento()
+    print(len(conexion.leerjson('sensoresOffline')))
    # conexion.validarInsertar({"codigo": "2", "nombre": "Takis", "des": "Takis morados picantes", "precio": 18})
