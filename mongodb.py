@@ -11,13 +11,13 @@ class conexionMongo(Conversion):
     #INICIALIZAR LA CONEXION CON MONGODB
     def __init__(self,nombrecoleccion):
         self.lista = sensores.sensor()
+        self.URI = constans.Constans.URI
         self.MONGO_DATABASE = constans.Constans.MONGO_DATABASE
         self.MONGO_COLECCION = constans.Constans.MONGO_COLECCION
         self.validarConexion = True
         try:
             #PROBAR LA CONEZION CON MONGODB
-            uri = constans.URI
-            connect = MongoClient(uri)
+            connect = MongoClient(self.URI)
             basasedatos = connect[self.MONGO_DATABASE] 
             self.coleccion = basasedatos[self.MONGO_COLECCION]
             self.validarConexion = True
@@ -86,6 +86,6 @@ class conexionMongo(Conversion):
 
 #PROBANDO LA CLASE
 if __name__ == "__main__":
-    conexion = conexionMongo("productos")
+    conexion = conexionMongo("sensores")
     #conexion.insertarDocumento()
    # conexion.validarInsertar({"codigo": "2", "nombre": "Takis", "des": "Takis morados picantes", "precio": 18})

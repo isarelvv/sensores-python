@@ -1,5 +1,6 @@
 from lista import Lista
 import mongodb
+
 # Description: Clase sensor
 class sensor(Lista):
     #INICIALIZAR LOS VALORES DE LA CLASE
@@ -50,6 +51,5 @@ class sensor(Lista):
 
 if __name__ == "__main__":
     sensor1 = sensor("temperatura", "T5", "30")
-    sensor1.sendMongo(sensor1)
+    print(sensor1)
         
-
