@@ -1,8 +1,10 @@
 from sensores import sensor
 from conexionarduino import conexionArduino
+from archivo_temporal import archivoTemporal
 import threading
 import time
 import os
+
 
 
 class Menu:
@@ -10,6 +12,11 @@ class Menu:
         self.stop_event = threading.Event()
         #INICIALIZAR LA CONEXION CON EL ARDUINO
         self.con = conexionArduino()
+        self.archivo = archivoTemporal()
+        hilo1 = threading.Thread (target = self.con.mongo.eliminar)
+        hilo1.start()
+        
+       
 
     def loopBorrar(self):
         while not self.stop_event.is_set():
@@ -35,10 +42,10 @@ class Menu:
 
 
 if __name__ == "__main__":
-    
     menu = Menu()
-    my_thread = threading.Thread(target=Menu.loopBorrar)
-    my_thread.start()
+    
+    #my_thread = threading.Thread(target=menu.loopBorrar())
+    #my_thread.start()
     x = 1
     while x == 1:
         opcion = menu.Inicio()
@@ -56,11 +63,10 @@ if __name__ == "__main__":
             menu.con.readSensor("AGUA","Agua","A1")
         elif opcion == "7":
             print("Todos los sensores")
-            
         elif opcion == "8":
             print("Modificar tiempo de respuesta")
         elif opcion == "9":
             print("Salir")
             menu.con.cerrarConexion()
-            menu.stop_event.set()
+            menu.temporal.detener()
             x = 0

@@ -5,12 +5,15 @@ from sensores import sensor
 import msvcrt
 from mongodb import conexionMongo
 
+
 class conexionArduino:
 #INICILIAR LA CONEXION CON EL ARDUINO
     def __init__(self):
-        self.arduino = serial.Serial("COM13",9600)
+        self.arduino = serial.Serial("COM3",9600)
         self.mongo = conexionMongo("sensores")
         time.sleep(2)
+        
+
 
 #METODO PARA LEER LOS DATOS DEL ARDUINO
     def leerArduino(self):

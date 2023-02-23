@@ -14,6 +14,7 @@ class conexionMongo(Conversion):
         self.listatemporal = sensores.sensor()
         self.listaoffline = sensores.sensor()
         self.URI = constans.Constans.URI
+        self.stop_event = threading.Event()
         self.MONGO_DATABASE = constans.Constans.MONGO_DATABASE
         self.MONGO_COLECCION = constans.Constans.MONGO_COLECCION
         self.validarConexion = True
@@ -27,8 +28,8 @@ class conexionMongo(Conversion):
                 for i in range(10):
                     time.sleep(0.1)
                     pbar.update(10)
-            self.segundoplano = threading.Thread(target=self.eliminarJSONTemporal)
-            self.segundoplano.start()
+            #self.segundoplano = threading.Thread(target=self.eliminarJSONTemporal)
+            #self.segundoplano.start()
         except:
             #SI NO SE PUEDE CONECTAR CON MONGODB
             print("No se logro conectar con MongoDB")
@@ -85,10 +86,26 @@ class conexionMongo(Conversion):
         self.guardarjson('sensoresTemporales',self.listatemporal.get_dict())
 
     def eliminarJSONTemporal(self):
-        
         while True:
             self.listatemporal = sensores.sensor()
             os.remove('sensoresTemporales.json')
+
+    def crarArchivo(self):
+            f = open("sensoresTemporales.json", "x")
+            f.close()
+    
+    def detener(self):
+        self.stop_event.set()
+
+    def eliminar(self):
+        while not self.stop_event.is_set(): 
+            print("putos")
+            time.sleep(15)
+            self.listatemporal = sensores.sensor()
+            os.remove("sensoresTemporales.json")
+            self.crarArchivo()
+            time.sleep(2)
+            self.eliminar()
     
 
         
