@@ -12,6 +12,9 @@ class conexionArduino:
         self.arduino = serial.Serial("COM3",9600)
         self.mongo = conexionMongo("sensores")
         time.sleep(2)
+        self.sensores= [{"tipo": "Temperatura","Id" : "T1"},{"tipo": "UltraSonico","Id" : "US"},
+                        {"tipo": "Iluminacios","Id" : "LUZ1"},{"tipo": "Infrrarojo","Id" : "IR1"},
+                        {"tipo": "Lluvia","Id" : "LL1"},{"tipo": "Agua","Id" : "A1"}]
         
 
 
@@ -54,8 +57,38 @@ class conexionArduino:
             self.mongo.insertarAMongo(sensor1)
             if msvcrt.kbhit():
                     break
-        
             
+    def readAllSensores(self):
+        self.escribirArduino("TODOS".encode("utf-8"))
+        while True:
+            data2 = self.arduino.read_until()
+            datadecoded = data2.decode("utf-8").strip()
+            if "T" in datadecoded:
+                sensor1 = sensor("Temperatura", "T1", datadecoded)
+                print(sensor1)
+                self.mongo.insertarAMongo(sensor1)
+            elif "D" in datadecoded:
+                sensor2 = sensor("UltraSonico", "US", datadecoded)
+                print(sensor2)
+                self.mongo.insertarAMongo(sensor2)
+            elif "lluvia" in datadecoded:
+                sensor3 = sensor("Lluvia", "LL1", datadecoded)
+                print(sensor3)
+                self.mongo.insertarAMongo(sensor3)
+            elif "Nivel" in datadecoded:
+                sensor4 = sensor("Agua", "A1", datadecoded)
+                print(sensor4)
+                self.mongo.insertarAMongo(sensor4)
+            elif "Recipiente" in datadecoded:
+                sensor5 = sensor("Infrrarojo", "IR1", datadecoded)
+                print(sensor5)
+                self.mongo.insertarAMongo(sensor5)
+            elif "Foco" in datadecoded:
+                sensor6 = sensor("Iluminacios", "LUZ1", datadecoded)
+                print(sensor6)
+                self.mongo.insertarAMongo(sensor6)
+            if msvcrt.kbhit():
+                    break
 
     
 

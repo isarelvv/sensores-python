@@ -62,7 +62,7 @@ if __name__ == "__main__":
         elif opcion == "6":
             menu.con.readSensor("AGUA","Agua","A1")
         elif opcion == "7":
-            print("Todos los sensores")
+            menu.con.readAllSensores()
         elif opcion == "8":
             print("Modificar tiempo de respuesta")
         elif opcion == "9":
