@@ -44,7 +44,6 @@ class conexionArduino:
         
     def readSensor(self,id,tipo,identificador):
         self.escribirArduino(id.encode("utf-8"))
-        data2 = self.arduino.read_until(b'Esperando...')
         while True:
             data2 = self.arduino.read_until()
             sensor1 = sensor(tipo, identificador, data2.decode("utf-8").strip())

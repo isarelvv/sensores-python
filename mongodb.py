@@ -80,16 +80,15 @@ class conexionMongo(Conversion):
         self.guardarjson('sensoresOffline',self.listaoffline.get_dict())
         
     
-    
     def guardarJSONTemporal(self,dict):
         self.listatemporal.insere(dict)
         self.guardarjson('sensoresTemporales',self.listatemporal.get_dict())
 
-
     def eliminarJSONTemporal(self):
-        time.sleep(15)
-        self.listatemporal = sensores.sensor()
-        os.remove('sensoresTemporales.json')
+        
+        while True:
+            self.listatemporal = sensores.sensor()
+            os.remove('sensoresTemporales.json')
     
 
         

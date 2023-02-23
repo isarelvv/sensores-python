@@ -1,6 +1,7 @@
 import os
 import time
 import keyboard
+import threading
 
 class PruebaTiempo:
     def __init__(self):
@@ -27,6 +28,14 @@ class PruebaTiempo:
 
             except:
                 print("Error al eliminar el archivo")
+
+
+    def borrarArchivo(self):
+        while True:
+            time.sleep(15)
+            os.remove("sensoresTemporales.json")
+
+        
 
 if __name__ == "__main__":
     prueba = PruebaTiempo()

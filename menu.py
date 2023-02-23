@@ -1,11 +1,21 @@
 from sensores import sensor
 from conexionarduino import conexionArduino
+import threading
+import time
+import os
 
 
 class Menu:
     def __init__(self):
+        self.stop_event = threading.Event()
         #INICIALIZAR LA CONEXION CON EL ARDUINO
         self.con = conexionArduino()
+
+    def loopBorrar(self):
+        while not self.stop_event.is_set():
+            time.sleep(15)
+            os.remove("sensoresTemporales.json")
+            
         
     def Inicio(self):
         x = 1
@@ -25,7 +35,10 @@ class Menu:
 
 
 if __name__ == "__main__":
+    
     menu = Menu()
+    my_thread = threading.Thread(target=Menu.loopBorrar)
+    my_thread.start()
     x = 1
     while x == 1:
         opcion = menu.Inicio()
@@ -49,4 +62,5 @@ if __name__ == "__main__":
         elif opcion == "9":
             print("Salir")
             menu.con.cerrarConexion()
+            menu.stop_event.set()
             x = 0
