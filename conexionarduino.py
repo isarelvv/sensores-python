@@ -9,9 +9,8 @@ from mongodb import conexionMongo
 class conexionArduino:
 #INICILIAR LA CONEXION CON EL ARDUINO
     def __init__(self):
-        self.arduino = serial.Serial("COM3",9600)
+        self.arduino = serial.Serial("COM4",9600)
         self.mongo = conexionMongo("sensores")
-        time.sleep(2)
         self.sensores= [{"tipo": "Temperatura","Id" : "T1"},{"tipo": "UltraSonico","Id" : "US"},
                         {"tipo": "Iluminacios","Id" : "LUZ1"},{"tipo": "Infrrarojo","Id" : "IR1"},
                         {"tipo": "Lluvia","Id" : "LL1"},{"tipo": "Agua","Id" : "A1"}]
@@ -57,6 +56,12 @@ class conexionArduino:
             self.mongo.insertarAMongo(sensor1)
             if msvcrt.kbhit():
                     break
+    def readTiempo(self,respuesa,tiempo):
+        tiempoconversion = tiempo
+        self.escribirArduino("TIEMPO".encode("utf-8"))
+        self.escribirArduino(tiempoconversion.encode("utf-8"))
+
+
             
     def readAllSensores(self):
         self.escribirArduino("TODOS".encode("utf-8"))

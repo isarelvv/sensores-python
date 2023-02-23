@@ -14,6 +14,7 @@ class conexionMongo(Conversion):
         self.listatemporal = sensores.sensor()
         self.listaoffline = sensores.sensor()
         self.URI = constans.Constans.URI
+        self.tiempoespera = 15
         self.stop_event = threading.Event()
         self.MONGO_DATABASE = constans.Constans.MONGO_DATABASE
         self.MONGO_COLECCION = constans.Constans.MONGO_COLECCION
@@ -38,8 +39,7 @@ class conexionMongo(Conversion):
 #METODO PARA INSERTAR UN DOCUMENTO EN MONGODB
     def insertarDocumento(self,documento):
         self.coleccion.insert_one(documento)
-        print("Documento insertado")
-
+        
 #METODO PARA ELIMINAR EL DOCUMENTO DE UNA COLECICON(NO USAR)
     def eliminarDocumento(self,key,value):
         documento = self.coleccion.find_one({key : value})
@@ -69,7 +69,7 @@ class conexionMongo(Conversion):
                 #LIMPIAR EL ARCHIVO SIN CONEXION
                 os.remove('sensoresOffline.json')
             self.guardarJSONTemporal(dict)
-            #self.insertarDocumento(dict.get_dict())           
+            self.insertarDocumento(dict.get_dict())           
         else:
             print("No se logro conectar con MongoDB, guardando localmente")
             self.guardarEnLocal(dict)
@@ -96,11 +96,14 @@ class conexionMongo(Conversion):
     
     def detener(self):
         self.stop_event.set()
+    
+    def cambiarTiempo(self,tiempo):
+        tiempo = int(tiempo)
+        self.tiempoespera = tiempo
 
     def eliminar(self):
         while not self.stop_event.is_set(): 
-            print("putos")
-            time.sleep(15)
+            time.sleep(self.tiempoespera)
             self.listatemporal = sensores.sensor()
             os.remove("sensoresTemporales.json")
             self.crarArchivo()

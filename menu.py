@@ -16,14 +16,6 @@ class Menu:
         hilo1 = threading.Thread (target = self.con.mongo.eliminar)
         hilo1.start()
         
-       
-
-    def loopBorrar(self):
-        while not self.stop_event.is_set():
-            time.sleep(15)
-            os.remove("sensoresTemporales.json")
-            
-        
     def Inicio(self):
         x = 1
         while x == 1:
@@ -39,6 +31,28 @@ class Menu:
             print("9.- Salir")
             opcion = input("Opcion:")
             return opcion
+    
+    def menuTiemp(self):
+        print("Modificar tiempo de respuesta o actualizacion de archivo temporal")
+        x=1 
+        while x == 1:
+            print("1.- Tiempo de respuesta")
+            print("2.- Tiempo de actualizacion")
+            print("3.- Salir")
+            opcion = input("Opcion:")
+            if opcion == "1":
+                print("Cuanto tiempo desea que sea se envien los datos?")
+                tiempo = input("Tiempo:")
+                print(tiempo)
+                self.con.readTiempo("tiempo",tiempo)
+            elif opcion == "2":
+                print("Cuanto tiempo desea que sea se actulice el archivo temporal?")
+                tiempo = input("Tiempo:")
+                self.con.mongo.cambiarTiempo(tiempo)
+            elif opcion == "3":
+                x = 0
+            else:
+                print("Opcion no valida")
 
 
 if __name__ == "__main__":
@@ -64,9 +78,9 @@ if __name__ == "__main__":
         elif opcion == "7":
             menu.con.readAllSensores()
         elif opcion == "8":
-            print("Modificar tiempo de respuesta")
+            menu.menuTiemp()
         elif opcion == "9":
             print("Salir")
             menu.con.cerrarConexion()
-            menu.temporal.detener()
+            menu.con.mongo.detener()
             x = 0
