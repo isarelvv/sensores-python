@@ -28,9 +28,43 @@ class Menu:
             print("6.- Sensor Agua")
             print("7.- Todos los sensores")
             print("8.- Cambiar tiempo de respuesta")
-            print("9.- Salir")
+            print("9.- Cambiar ubicacion de sensores")
+            print("10.- Salir")
             opcion = input("Opcion:")
             return opcion
+        
+    def menuUbicacion(self):
+        x = 1
+        while x ==1:
+            print("Modificar ubicacion de sensores")
+            print("Selecciona una opcion")
+            print("1.- Sensor Temperatura")
+            print("2.- Sensor Ultrasonico")
+            print("3.- Sensor Infrarojo")
+            print("4.- Sensor Iluminacion ")
+            print("5.- Sensor Lluvia")
+            print("6.- Sensor Agua")
+            print("7.- Salir")
+            opcion = int(input("Opcion:"))
+            x = self.cambiarUbicacionSensor(opcion,x)
+        
+    def cambiarUbicacionSensor(self,opcion,x):
+        if(opcion==1):
+            print("Ubicacion temeperatura")
+        elif(opcion==2):
+            print("Ubicacion ultrasonico")
+        elif(opcion==3):
+            print("Ubicacion infrarojo")
+        elif(opcion==4):
+            print("Ubicacion iluminacion")
+        elif(opcion==5):
+            print("Ubicacion lluvia")
+        elif(opcion==6):
+            print("Ubicacion agua")
+        elif(opcion==7):
+            print("Salir")
+            x = 0
+            return x
     
     def menuTiemp(self):
         print("Modificar tiempo de respuesta o actualizacion de archivo temporal")
@@ -80,6 +114,8 @@ if __name__ == "__main__":
         elif opcion == "8":
             menu.menuTiemp()
         elif opcion == "9":
+            menu.menuUbicacion()
+        elif opcion == "10":
             print("Salir")
             menu.con.cerrarConexion()
             menu.con.mongo.detener()

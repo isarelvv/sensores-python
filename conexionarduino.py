@@ -9,7 +9,7 @@ from mongodb import conexionMongo
 class conexionArduino:
 #INICILIAR LA CONEXION CON EL ARDUINO
     def __init__(self):
-        self.arduino = serial.Serial("COM4",9600)
+        self.arduino = serial.Serial("COM3",9600)
         self.mongo = conexionMongo("sensores")
         self.sensores= [{"tipo": "Temperatura","Id" : "T1"},{"tipo": "UltraSonico","Id" : "US"},
                         {"tipo": "Iluminacios","Id" : "LUZ1"},{"tipo": "Infrrarojo","Id" : "IR1"},
