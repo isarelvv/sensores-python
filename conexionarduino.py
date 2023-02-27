@@ -51,7 +51,6 @@ class conexionArduino:
         
     def readSensor(self,id,tipo,identificador,contador):
         self.escribirArduino(id.encode("utf-8"))
-       
         while True:
             j = 0
             while (j < contador):
