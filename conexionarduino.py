@@ -15,6 +15,7 @@ class conexionArduino:
                         {"tipo": "Iluminacios","Id" : "LUZ1"},{"tipo": "Infrrarojo","Id" : "IR1"},
                         {"tipo": "Lluvia","Id" : "LL1"},{"tipo": "Agua","Id" : "A1"}]
         self.lista = ["cocina","baño"]
+
         
 
 
@@ -63,6 +64,7 @@ class conexionArduino:
                 self.mongo.insertarAMongo(sensor1)
             if msvcrt.kbhit():
                         break
+
     def readTiempo(self,respuesa,tiempo):
         tiempoconversion = tiempo
         self.escribirArduino("TIEMPO".encode("utf-8"))

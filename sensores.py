@@ -43,7 +43,6 @@ class sensor(Lista):
         for s in ultrasonico:
             print(s)
         
-        
 #FUNCION PARA SACAR LA LLAVE DE BUSQUEDA EN LA BASE DE DATOS 
     def getKeys(self):
         return self.identificador
@@ -60,5 +59,5 @@ if __name__ == "__main__":
     #print(sensor1)
     lista = [sensor1,sensor2]
     sensor1.construirUltrasonico(lista)
-    
+
         
