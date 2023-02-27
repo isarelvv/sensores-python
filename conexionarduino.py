@@ -4,6 +4,7 @@ from constans import Constans
 from sensores import sensor
 import msvcrt
 from mongodb import conexionMongo
+import pickle
 
 
 class conexionArduino:
@@ -19,10 +20,19 @@ class conexionArduino:
         self.listalluvia = ["exterior"]
         self.listainfrarojo = ["puerta"]
         self.listaagua = ["recamara"]
-        self.listailuminacion = ["sala"]
-
+        self.listailuminacion = ["recamara"]
         
 
+
+    def guardarUbicaciones(self):
+        todas_las_ubicaciones = [self.listatemp,self.listaultra,self.listalluvia,self.listainfrarojo,self.listaagua,self.listailuminacion]
+        with open("ubicaciones.txt","wb") as archivo:
+            pickle.dump(todas_las_ubicaciones,archivo)
+
+    def cargarUbicaciones(self):
+        with open("ubicaciones.txt","rb") as archivo:
+            todas_las_ubicaciones = pickle.load(archivo)
+            self.listatemp,self.listaultra,self.listalluvia,self.listainfrarojo,self.listaagua,self.listailuminacion = todas_las_ubicaciones
 
 #METODO PARA LEER LOS DATOS DEL ARDUINO
     def leerArduino(self):
@@ -125,7 +135,8 @@ class conexionArduino:
 
 if __name__ == "__main__":
     conexion = conexionArduino()
-    conexion.readSensor("TH","Temperatura","T1")
+    conexion.guardarUbicaciones()
+    conexion.cargarUbicaciones()
 
 
             

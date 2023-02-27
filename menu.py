@@ -5,8 +5,6 @@ import threading
 import time
 import os
 
-
-
 class Menu:
     def __init__(self):
         self.stop_event = threading.Event()
@@ -15,6 +13,9 @@ class Menu:
         self.archivo = archivoTemporal()
         hilo1 = threading.Thread (target = self.con.mongo.eliminar)
         hilo1.start()
+        if (os.path.exists("ubicaciones.txt")==False):
+            self.con.guardarUbicaciones()
+        self.con.cargarUbicaciones()
         
     def Inicio(self):
         x = 1
@@ -47,20 +48,33 @@ class Menu:
             print("7.- Salir")
             opcion = int(input("Opcion:"))
             x = self.cambiarUbicacionSensor(opcion,x)
-        
+
+    def modificarUbicacionSensor(self,lista):
+        contador = 1
+        print("Ubicacion temeperatura")
+        for item in lista:
+            contadorstr = str(contador)
+            print(contadorstr+"-." " "+"U"+contadorstr + " " +item)
+            contador += 1
+        print("Selecciona el sensor a modificar")
+        opcion = int(input("Opcion:"))
+        print("Ingresa la nueva ubicacion")
+        ubicacion = input("Ubicacion:")
+        lista[opcion-1] = ubicacion
+           
     def cambiarUbicacionSensor(self,opcion,x):
         if(opcion==1):
-            print("Ubicacion temeperatura")
+            self.modificarUbicacionSensor(self.con.listatemp)
         elif(opcion==2):
-            print("Ubicacion ultrasonico")
+            self.modificarUbicacionSensor(self.con.listaultra)
         elif(opcion==3):
-            print("Ubicacion infrarojo")
+            self.modificarUbicacionSensor(self.con.listainfrarojo)
         elif(opcion==4):
-            print("Ubicacion iluminacion")
+            self.modificarUbicacionSensor(self.con.listailuminacion)
         elif(opcion==5):
-            print("Ubicacion lluvia")
+            self.modificarUbicacionSensor(self.con.listalluvia)
         elif(opcion==6):
-            print("Ubicacion agua")
+            self.modificarUbicacionSensor(self.con.listaagua)
         elif(opcion==7):
             print("Salir")
             x = 0
@@ -91,9 +105,6 @@ class Menu:
 
 if __name__ == "__main__":
     menu = Menu()
-    
-    #my_thread = threading.Thread(target=menu.loopBorrar())
-    #my_thread.start()
     x = 1
     while x == 1:
         opcion = menu.Inicio()
@@ -102,7 +113,7 @@ if __name__ == "__main__":
         elif opcion == "2":
             menu.con.readSensor("US","UltraSonico","U",2)
         elif opcion == "3":
-            menu.con.readSensor("INFRA","Infrarrojo","I",1)
+            menu.con.readSensor("INFRA","Infrarrojo","I",)
         elif opcion == "4":
             menu.con.readSensor("LUZ","Iluminacion","L",1)
         elif opcion == "5":
@@ -119,4 +130,5 @@ if __name__ == "__main__":
             print("Salir")
             menu.con.cerrarConexion()
             menu.con.mongo.detener()
+            menu.con.guardarUbicaciones()
             x = 0
