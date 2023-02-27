@@ -4,20 +4,35 @@ from constans import Constans
 from sensores import sensor
 import msvcrt
 from mongodb import conexionMongo
+import pickle
 
 
 class conexionArduino:
 #INICILIAR LA CONEXION CON EL ARDUINO
     def __init__(self):
-        self.arduino = serial.Serial("COM4",9600)
+        self.arduino = serial.Serial("COM3",9600)
         self.mongo = conexionMongo("sensores")
         self.sensores= [{"tipo": "Temperatura","Id" : "T1"},{"tipo": "UltraSonico","Id" : "US"},
                         {"tipo": "Iluminacios","Id" : "LUZ1"},{"tipo": "Infrrarojo","Id" : "IR1"},
                         {"tipo": "Lluvia","Id" : "LL1"},{"tipo": "Agua","Id" : "A1"}]
-        self.lista = ["cocina","baño"]
-
+        self.listaultra = ["cocina","baño"]
+        self.listatemp= ["sala"]
+        self.listalluvia = ["exterior"]
+        self.listainfrarojo = ["puerta"]
+        self.listaagua = ["recamara"]
+        self.listailuminacion = ["recamara"]
         
 
+
+    def guardarUbicaciones(self):
+        todas_las_ubicaciones = [self.listatemp,self.listaultra,self.listalluvia,self.listainfrarojo,self.listaagua,self.listailuminacion]
+        with open("ubicaciones.txt","wb") as archivo:
+            pickle.dump(todas_las_ubicaciones,archivo)
+
+    def cargarUbicaciones(self):
+        with open("ubicaciones.txt","rb") as archivo:
+            todas_las_ubicaciones = pickle.load(archivo)
+            self.listatemp,self.listaultra,self.listalluvia,self.listainfrarojo,self.listaagua,self.listailuminacion = todas_las_ubicaciones
 
 #METODO PARA LEER LOS DATOS DEL ARDUINO
     def leerArduino(self):
@@ -51,10 +66,11 @@ class conexionArduino:
         
     def readSensor(self,id,tipo,identificador,contador):
         self.escribirArduino(id.encode("utf-8"))
+        lista = self.seleccionarLista(id)
         while True:
             j = 0
             while (j < contador):
-                tiposensor = tipo +" "+ self.lista [j]
+                tiposensor = tipo +" "+ lista [j]
                 j += 1
                 identificadorsensor = identificador + str(j)
                 data2 = self.arduino.read_until()
@@ -68,7 +84,6 @@ class conexionArduino:
         tiempoconversion = tiempo
         self.escribirArduino("TIEMPO".encode("utf-8"))
         self.escribirArduino(tiempoconversion.encode("utf-8"))
-
 
             
     def readAllSensores(self):
@@ -103,11 +118,25 @@ class conexionArduino:
             if msvcrt.kbhit():
                     break
 
-    
+    def seleccionarLista(self,id):
+        if id == "TH":
+            return self.listatemp
+        elif id == "US":
+            return self.listaultra
+        elif id == "LLUVIA":
+            return self.listalluvia
+        elif id == "AGUA":
+            return self.listaagua
+        elif id == "INFRA":
+            return self.listainfrarojo
+        elif id == "LUZ":
+            return self.listailuminacion
+
 
 if __name__ == "__main__":
     conexion = conexionArduino()
-    conexion.readSensor("TH","Temperatura","T1")
+    conexion.guardarUbicaciones()
+    conexion.cargarUbicaciones()
 
 
             
