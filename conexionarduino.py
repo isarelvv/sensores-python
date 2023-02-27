@@ -14,7 +14,12 @@ class conexionArduino:
         self.sensores= [{"tipo": "Temperatura","Id" : "T1"},{"tipo": "UltraSonico","Id" : "US"},
                         {"tipo": "Iluminacios","Id" : "LUZ1"},{"tipo": "Infrrarojo","Id" : "IR1"},
                         {"tipo": "Lluvia","Id" : "LL1"},{"tipo": "Agua","Id" : "A1"}]
-        self.lista = ["cocina","baño"]
+        self.listaultra = ["cocina","baño"]
+        self.listatemp= ["sala"]
+        self.listalluvia = ["exterior"]
+        self.listainfrarojo = ["puerta"]
+        self.listaagua = ["recamara"]
+        self.listailuminacion = ["sala"]
 
         
 
@@ -51,11 +56,11 @@ class conexionArduino:
         
     def readSensor(self,id,tipo,identificador,contador):
         self.escribirArduino(id.encode("utf-8"))
-       
+        lista = self.seleccionarLista(id)
         while True:
             j = 0
             while (j < contador):
-                tiposensor = tipo +" "+ self.lista [j]
+                tiposensor = tipo +" "+ lista [j]
                 j += 1
                 identificadorsensor = identificador + str(j)
                 data2 = self.arduino.read_until()
@@ -69,7 +74,6 @@ class conexionArduino:
         tiempoconversion = tiempo
         self.escribirArduino("TIEMPO".encode("utf-8"))
         self.escribirArduino(tiempoconversion.encode("utf-8"))
-
 
             
     def readAllSensores(self):
@@ -104,7 +108,20 @@ class conexionArduino:
             if msvcrt.kbhit():
                     break
 
-    
+    def seleccionarLista(self,id):
+        if id == "TH":
+            return self.listatemp
+        elif id == "US":
+            return self.listaultra
+        elif id == "LLUVIA":
+            return self.listalluvia
+        elif id == "AGUA":
+            return self.listaagua
+        elif id == "INFRA":
+            return self.listainfrarojo
+        elif id == "LUZ":
+            return self.listailuminacion
+
 
 if __name__ == "__main__":
     conexion = conexionArduino()
