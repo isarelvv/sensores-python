@@ -1,0 +1,20 @@
+[
+    {
+        "tipo": "Temperatura",
+        "identificador": "T1",
+        "valor": null,
+        "descripcion": "Cocina"
+    },
+    {
+        "tipo": "Agua",
+        "identificador": "A2",
+        "valor": null,
+        "descripcion": "Patio"
+    },
+    {
+        "tipo": "Luz",
+        "identificador": "LUZ1",
+        "valor": null,
+        "descripcion": "Patio"
+    }
+]

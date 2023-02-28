@@ -15,6 +15,7 @@ class Lista(Conversion):
     def remover(self, elemento):
         self.lista.remove(self.buscar(elemento))
         self.tamanho -= 1
+        
     def mostrar(self):
         for item in self.lista:
             print(item)
@@ -22,10 +23,10 @@ class Lista(Conversion):
 #BUSCAR UN ELEMENTO EN LA LISTA          
     def buscar(self, elemento):
         for item in self.lista:
-            if item.getKey() == elemento:
+            print
+            if item.getKeys() == elemento:
                 return item
-            else:
-                return "No se encontro el elemento"
+               
         #return key
     def editar(self, elemento, posicion):
         self.lista[posicion] = elemento
