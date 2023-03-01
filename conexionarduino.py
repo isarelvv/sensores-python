@@ -10,7 +10,7 @@ import pickle
 class conexionArduino:
 #INICILIAR LA CONEXION CON EL ARDUINO
     def __init__(self):
-        self.arduino = serial.Serial("COM3",9600)
+        self.arduino = serial.Serial("COM4",9600)
         self.mongo = conexionMongo("sensores")
         self.sensores= [{"tipo": "Temperatura","Id" : "T1"},{"tipo": "UltraSonico","Id" : "US"},
                         {"tipo": "Iluminacios","Id" : "LUZ1"},{"tipo": "Infrrarojo","Id" : "IR1"},
@@ -22,8 +22,6 @@ class conexionArduino:
         self.listaagua = ["recamara"]
         self.listailuminacion = ["recamara"]
         
-
-
     def guardarUbicaciones(self):
         todas_las_ubicaciones = [self.listatemp,self.listaultra,self.listalluvia,self.listainfrarojo,self.listaagua,self.listailuminacion]
         with open("ubicaciones.txt","wb") as archivo:

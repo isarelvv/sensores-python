@@ -33,11 +33,14 @@ class sensor(Lista):
             return diccionario
 
 #FUNCION PARA CONVERTIR UN UN JSON A UN LISTA
-    def conversionlista(self,arch,list):
-        li = self.leerjson(arch)
+    def conversionlista(self):
+        self.lista = []
+        li = self.leerjson('listadesensores')
         for val in li:
-            sensorx = sensor(val['tipo'], val['identificador'], val['valor'],val['descripcion'])
-            list.insere(sensorx)
+            sensor1= sensor(val['tipo'], val['identificador'], val['valor'],val['descripcion'])
+            self.insere(sensor1)
+        return self.lista
+
 
     def construirUltrasonico(self,lista_ultra):
         ultrasonico = lista_ultra
