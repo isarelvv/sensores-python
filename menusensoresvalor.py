@@ -21,10 +21,32 @@ class menuSensoresValor(sensorValor):
         valor = input()
         timestamp = time.time()
         sensorvalor = sensorValor("1", sensorx, valor, timestamp)
-        self.conexion.insertarAMongo(sensorvalor.get_dict())
+        #self.conexion.insertarAMongo(sensorvalor)
         print("Sensor agregado con exito")
+
+    def seleccionarSensor(self,tipo):
+        lista = []
+        for s in self.listasensor:
+            if s.tipo == tipo:
+                lista.append(s)
+        return lista
+    
+    def simularEntrada(self):
+        lista = self.seleccionarSensor("Temperatura")
+        while True:
+            for s in lista:
+                sensornuevo = sensorValor("1",s,"12",time.time())
+                print(sensornuevo)
+                #self.conexion.insertarAMongo(sensorvalor)
+                print("Sensor agregado con exito")
+                time.sleep(2)
+            time.sleep(2)
+            
+            
+            
     
 if __name__ == "__main__":
     menu = menuSensoresValor()
     menu.mostraSensores()
     menu.nuevoSensorValor()
+    menu.simularEntrada()
