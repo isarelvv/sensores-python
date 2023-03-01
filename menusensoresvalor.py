@@ -41,6 +41,25 @@ class menuSensoresValor(sensorValor):
                 print("Sensor agregado con exito")
                 time.sleep(2)
             time.sleep(2)
+
+    def llamarTipoSensor(self,tipo):
+        lista = self.seleccionarSensor(tipo)
+        while True:
+            for s in lista:
+               ##SE LEE EL VALOR DEL ARDUINO
+                #valor = arduino.read()
+                #sensornuevo = sensorValor("1",s,valor,time.time())
+                #print(sensornuevo)
+                #self.conexion.insertarAMongo(sensorvalor)
+                print("Sensor agregado con exito")
+                time.sleep(2)
+
+    def llamarTodosLosSensores(self):
+        while True:
+            pass
+            
+                
+            
             
             
             

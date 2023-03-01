@@ -5,7 +5,7 @@ class MenuSensores(sensor):
     def __init__(self):
         self.listasensores = sensor()
         try:
-            self.listasensores.conversionlista("listadesensores",self.listasensores)
+           self.listasensores = self.listasensores.conversionlista()
         except:
             print("No hay sensores registrados")
         
