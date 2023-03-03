@@ -4,10 +4,9 @@ import mongodb
 # Description: Clase sensor
 class sensor(Lista):
     #INICIALIZAR LOS VALORES DE LA CLASE
-    def __init__(self, tipo="N/A", identificador="N/A", valor="N/A", descripcion="N/A"):
+    def __init__(self, tipo="N/A", identificador="N/A", descripcion="N/A"):
         self.tipo = tipo
         self.identificador = identificador
-        self.valor = valor
         self.descripcion = descripcion
         super().__init__()
 
@@ -17,7 +16,7 @@ class sensor(Lista):
         if self.tamanho >=1 :
             return f"Lista de sensores: {self.lista}"
         else:
-            return f"Sensor de tipo: {self.tipo}, identificador: {self.identificador}, valor: {self.valor}, descripcion: {self.descripcion}"
+            return f"Sensor de tipo: {self.tipo}, identificador: {self.identificador}, descripcion: {self.descripcion}"
 
 #FUNCION PARA CONVERTIR UNAS LISTA A DICCIONARIO
     def get_dict(self):
@@ -27,8 +26,8 @@ class sensor(Lista):
                 arreglo.append(item.get_dict())
             return arreglo
         else:
-            key_list = ["tipo", "identificador", "valor", "descripcion"]
-            value_list = [self.tipo, self.identificador, self.valor, self.descripcion]
+            key_list = ["tipo", "identificador", "descripcion"]
+            value_list = [self.tipo, self.identificador, self.descripcion]
             diccionario = dict(zip(key_list, value_list))
             return diccionario
 
@@ -37,7 +36,7 @@ class sensor(Lista):
         self.lista = []
         li = self.leerjson('listadesensores')
         for val in li:
-            sensor1= sensor(val['tipo'], val['identificador'], val['valor'],val['descripcion'])
+            sensor1= sensor(val['tipo'], val['identificador'],val['descripcion'])
             self.insere(sensor1)
         return self.lista
 
@@ -58,6 +57,13 @@ class sensor(Lista):
 
     def cargarSensores(self,lista,nombre="listadesensores"):
         self.guardarjson(nombre,lista.get_dict())
+
+    def convertirListaAObjeto(self,lista):
+        listasensores = sensor()
+        for val in lista:
+            sensor1= sensor(val['tipo'], val['identificador'],val['descripcion'])
+            listasensores.insere(sensor1)
+        return listasensores
 
 
 if __name__ == "__main__":

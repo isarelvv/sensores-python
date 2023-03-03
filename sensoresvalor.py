@@ -3,8 +3,7 @@ import mongodb
 from sensores import sensor
 
 class sensorValor(Lista):
-    def __init__(self,id,sensor="N/A",valor="N/A",timestamp="N/A"):
-        self.id = id
+    def __init__(self,sensor="N/A",valor="N/A",timestamp="N/A"):
         self.sensor = sensor
         self.valor = valor
         self.timestamp = timestamp
@@ -25,8 +24,8 @@ class sensorValor(Lista):
                 arreglo.append(item.get_dict())
             return arreglo
         else:
-            key_list = ["id", "sensor", "valor", "timestamp"]
-            value_list = [self.id, self.sensor, self.valor, self.timestamp]
+            key_list = ["sensor", "valor", "timestamp"]
+            value_list = [self.sensor, self.valor, self.timestamp]
             diccionario = dict(zip(key_list, value_list))
             return diccionario
         
@@ -34,7 +33,7 @@ class sensorValor(Lista):
         self.lista = []
         li = self.leerjson('listadesensoresvalor')
         for val in li:
-            sensorvalor= sensorValor(val['id'], val['sensor'], val['valor'],val['timestamp'])
+            sensorvalor= sensorValor(val['sensor'], val['valor'],val['timestamp'])
             self.insere(sensorvalor)
         return self.lista
 
