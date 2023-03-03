@@ -11,14 +11,8 @@ from sensoresvalor import sensorValor
 class conexionArduino(sensorValor):
 #INICILIAR LA CONEXION CON EL ARDUINO
     def __init__(self):
-        self.arduino = serial.Serial("COM3",9600)
+        self.arduino = serial.Serial("COM13",9600)
         self.listasensor = sensor().conversionlista()
-        self.listatemp = []
-        self.listaultra = []
-        self.listalluvia = []
-        self.listainfrarojo = []
-        self.listaagua = []
-        self.listailuminacion = []
         self.cargarUbicaciones()
         self.mongo = conexionMongo("valores")
         
@@ -32,6 +26,7 @@ class conexionArduino(sensorValor):
         with open("ubicaciones.txt","rb") as archivo:
             todas_las_ubicaciones = pickle.load(archivo)
             self.listatemp,self.listaultra,self.listalluvia,self.listainfrarojo,self.listaagua,self.listailuminacion = todas_las_ubicaciones
+            
     def seleccionarSensor(self,tipo):
         lista = []
         for s in self.listasensor:
@@ -47,10 +42,11 @@ class conexionArduino(sensorValor):
                 data = self.arduino.read_until()
                 sensornuevo = sensorValor(s,data.decode("utf-8").strip(),time.time())
                 print(sensornuevo)
-                self.mongo.insertarAMongo(sensornuevo.getDict())
+                self.mongo.insertarAMongo(sensornuevo)
                 print("Sensor agregado con exito")
             if msvcrt.kbhit():
                     break
+            
     def lecturaSensor(self,tipo):
         lista = self.seleccionarSensor(tipo)
         for s in lista:

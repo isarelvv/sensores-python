@@ -5,14 +5,16 @@ import time
 import constans
 from jsonclass import Conversion
 import sensores
+from sensoresvalor import sensorValor
 import os
 import threading
+
 
 class conexionMongo(Conversion):
     #INICIALIZAR LA CONEXION CON MONGODB
     def __init__(self,nombrecoleccion):
-        self.listatemporal = sensores.sensor()
-        self.listaoffline = sensores.sensor()
+        self.listatemporal = sensorValor()
+        self.listaoffline = sensorValor()
         self.URI = constans.Constans.URI
         self.tiempoespera = 15
         self.stop_event = threading.Event()
@@ -38,7 +40,7 @@ class conexionMongo(Conversion):
     
 #METODO PARA INSERTAR UN DOCUMENTO EN MONGODB
     def insertarDocumento(self,documento):
-        self.coleccion.insert_one(documento)
+        self.coleccion.insert_one(documento.get_dict())
         
 #METODO PARA ELIMINAR EL DOCUMENTO DE UNA COLECICON(NO USAR)
     def eliminarDocumento(self,key,value):
@@ -65,7 +67,7 @@ class conexionMongo(Conversion):
             if os.path.exists('sensoresOffline.json'):
                 docDesconectado = self.leerjson('sensoresOffline')
                 #SI TIENE CONTENIDO, INTENTAR GUARDARLO EN MONGOD
-                self.coleccion.insert_many(docDesconectado)
+                #self.coleccion.insert_many(docDesconectado)
                 #LIMPIAR EL ARCHIVO SIN CONEXION
                 os.remove('sensoresOffline.json')
             self.guardarJSONTemporal(dict)
@@ -104,7 +106,7 @@ class conexionMongo(Conversion):
     def eliminar(self):
         while not self.stop_event.is_set(): 
             time.sleep(self.tiempoespera)
-            self.listatemporal = sensores.sensor()
+            self.listatemporal = sensorValor()
             os.remove("sensoresTemporales.json")
             self.crarArchivo()
             time.sleep(2)

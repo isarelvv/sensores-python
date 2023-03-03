@@ -1,5 +1,4 @@
 from lista import Lista
-import mongodb
 
 # Description: Clase sensor
 class sensor(Lista):
@@ -26,10 +25,7 @@ class sensor(Lista):
                 arreglo.append(item)
             return arreglo
         else:
-            key_list = ["tipo", "identificador", "descripcion"]
-            value_list = [self.tipo, self.identificador, self.descripcion]
-            diccionario = dict(zip(key_list, value_list))
-            return diccionario
+            return {'tipo': self.tipo,'tdentificador': self.identificador,'descripcion': self.descripcion}
 
 #FUNCION PARA CONVERTIR UN UN JSON A UN LISTA
     def conversionlista(self):
@@ -52,8 +48,9 @@ class sensor(Lista):
         
 #FUNCION PARA MANDAR EL SENSOR A MONGO
     def sendMongo(self,sensor):
-        mongoHelper = mongodb.conexionMongo("sensores")
-        mongoHelper.insertarAMongo(sensor)
+        #mongoHelper = mongodb.conexionMongo("sensores")
+        #mongoHelper.insertarAMongo(sensor)
+        pass
 
     def cargarSensores(self,lista,nombre="listadesensores"):
         self.guardarjson(nombre,lista.get_dict())

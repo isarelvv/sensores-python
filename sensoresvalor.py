@@ -24,10 +24,7 @@ class sensorValor(Lista):
                 arreglo.append(item.get_dict())
             return arreglo
         else:
-            key_list = ["sensor", "valor", "timestamp"]
-            value_list = [self.sensor.get_dict(), self.valor, self.timestamp]
-            diccionario = dict(zip(key_list, value_list))
-            return diccionario
+            return {'sensor': self.sensor.get_dict(),'valor':self.valor,'timestamp': self.timestamp}
         
     def conversionlista(self):
         self.lista = []
