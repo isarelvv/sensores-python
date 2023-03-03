@@ -47,7 +47,7 @@ class conexionArduino(sensorValor):
                 data = self.arduino.read_until()
                 sensornuevo = sensorValor(s,data.decode("utf-8").strip(),time.time())
                 print(sensornuevo)
-                self.mongo.insertarAMongo(sensornuevo.getDict())
+                self.mongo.insertarAMongo(sensornuevo.get_dict2())
                 print("Sensor agregado con exito")
             if msvcrt.kbhit():
                     break

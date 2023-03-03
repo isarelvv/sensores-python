@@ -7,12 +7,17 @@ from jsonclass import Conversion
 import sensores
 import os
 import threading
+from sensoresvalor import sensorValor
 
 class conexionMongo(Conversion):
     #INICIALIZAR LA CONEXION CON MONGODB
     def __init__(self,nombrecoleccion):
-        self.listatemporal = sensores.sensor()
-        self.listaoffline = sensores.sensor()
+        self.listatemporal = sensorValor()
+        self.listaoffline = sensorValor()
+        try:
+           self.listatemporal = self.leerjson("sensoresOffline")
+        except:
+            print("No hay sensores registrados")
         self.URI = constans.Constans.URI
         self.tiempoespera = 15
         self.stop_event = threading.Event()
@@ -68,8 +73,9 @@ class conexionMongo(Conversion):
                 self.coleccion.insert_many(docDesconectado)
                 #LIMPIAR EL ARCHIVO SIN CONEXION
                 os.remove('sensoresOffline.json')
+            
             self.guardarJSONTemporal(dict)
-            self.insertarDocumento(dict)           
+            self.insertarDocumento(dict)         
         else:
             print("No se logro conectar con MongoDB, guardando localmente")
             self.guardarEnLocal(dict)
@@ -78,16 +84,16 @@ class conexionMongo(Conversion):
 #METODO PARA GUARDAR SIN CONEXION
     def guardarEnLocal(self,data):
         self.listaoffline.insere(data)
-        self.guardarjson('sensoresOffline',self.listaoffline.get_dict())
+        self.guardarjson('sensoresOffline',self.listaoffline)
         
     
-    def guardarJSONTemporal(self,dict):
-        self.listatemporal.insere(dict)
-        self.guardarjson('sensoresTemporales',self.listatemporal.get_dict())
+    def guardarJSONTemporal(self,objeto):
+        self.listatemporal.insere(objeto)
+        self.guardarjson('sensoresTemporales',self.listatemporal.get_dict2())
 
     def eliminarJSONTemporal(self):
         while True:
-            self.listatemporal = sensores.sensor()
+            self.listatemporal = sensorValor()
             os.remove('sensoresTemporales.json')
 
     def crarArchivo(self):
@@ -104,7 +110,7 @@ class conexionMongo(Conversion):
     def eliminar(self):
         while not self.stop_event.is_set(): 
             time.sleep(self.tiempoespera)
-            self.listatemporal = sensores.sensor()
+            self.listatemporal = sensorValor()
             os.remove("sensoresTemporales.json")
             self.crarArchivo()
             time.sleep(2)

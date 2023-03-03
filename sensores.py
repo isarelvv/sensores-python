@@ -1,5 +1,5 @@
 from lista import Lista
-import mongodb
+
 
 # Description: Clase sensor
 class sensor(Lista):
