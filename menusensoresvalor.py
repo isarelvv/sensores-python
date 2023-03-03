@@ -10,7 +10,8 @@ class menuSensoresValor(sensorValor):
     def __init__(self):
         self.listasensor = sensor().conversionlista()
         self.conexion = conexionMongo("valores")
-        #self.arduino = conexionArduino()
+        self.arduinos = conexionArduino()
+
 
     def mostraSensores(self):
         for s in self.listasensor:
@@ -33,37 +34,38 @@ class menuSensoresValor(sensorValor):
             if s.tipo == tipo:
                 lista.append(s)
         return lista
-    
+
     def simularEntrada(self):
         lista = self.seleccionarSensor("Temperatura")
         while True:
             for s in lista:
                 sensornuevo = sensorValor(s,"12",time.time())
                 print(sensornuevo)
-                #self.conexion.insertarAMongo(sensorvalor)
+                self.conexion.insertarAMongo(sensornuevo)
                 print("Sensor agregado con exito")
                 time.sleep(2)
 
     def llamarTipoSensor(self,tipo,identificador):
         lista = self.seleccionarSensor(tipo)
+        self.arduinos.escribirArduino(identificador.encode("utf-8"))
         while True:
             for s in lista:
-                data = self.arduino.escribirArduino(identificador)
-                sensornuevo = sensorValor("1",s,data,time.time())
+                data = self.arduinos.arduino.read_until()
+                sensornuevo = sensorValor("1",s,data.decode("utf-8").strip,time.time())
                 print(sensornuevo)
-                #self.conexion.insertarAMongo(sensorvalor)
+                self.conexion.insertarAMongo(sensornuevo)
                 print("Sensor agregado con exito")
             if msvcrt.kbhit():
                     break
-            
+  
     def lecturaSensor(self,tipo):
         lista = self.seleccionarSensor(tipo)
         for s in lista:
             ##SE LEE EL VALOR DEL ARDUINO
-            #valor = arduino.read()
-            #sensornuevo = sensorValor("1",s,valor,time.time())
-            #print(sensornuevo)
-            #self.conexion.insertarAMongo(sensorvalor)
+            valor = self.arduinos.read()
+            sensornuevo = sensorValor("1",s,valor,time.time())
+            print(sensornuevo)
+            self.conexion.insertarAMongo(sensornuevo)
             print("Sensor agregado con exito")
         print("Saliendo")
             
@@ -96,4 +98,10 @@ if __name__ == "__main__":
     menu = menuSensoresValor()
     menu.mostraSensores()
     #menu.nuevoSensorValor()
-    #menu.simularEntrada()
+    menu.arduinos.arduino.write("TH".encode("utf-8"))
+    data= menu.arduinos.arduino.read_until()
+    decoded = data.decode("utf-8").strip()
+    print(decoded)
+   
+    #menu.llamarTipoSensor("Temperatura","TH")
+   # menu.llamarTipoSensor("Temperatura","TH")

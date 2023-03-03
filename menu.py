@@ -5,6 +5,8 @@ import threading
 import time
 import os
 
+from menuSensores import MenuSensores
+
 class Menu:
     def __init__(self):
         self.stop_event = threading.Event()
@@ -16,6 +18,7 @@ class Menu:
         if (os.path.exists("ubicaciones.txt")==False):
             self.con.guardarUbicaciones()
         self.con.cargarUbicaciones()
+        self.menuSensores = MenuSensores()
         
     def Inicio(self):
         x = 1
@@ -29,7 +32,7 @@ class Menu:
             print("6.- Sensor Agua")
             print("7.- Todos los sensores")
             print("8.- Cambiar tiempo de respuesta")
-            print("9.- Cambiar ubicacion de sensores")
+            print("9.- Modificar Sensores")
             print("10.- Salir")
             opcion = input("Opcion:")
             return opcion
@@ -109,23 +112,23 @@ if __name__ == "__main__":
     while x == 1:
         opcion = menu.Inicio()
         if opcion == "1":
-            data = menu.con.readSensor("TH","Temperatura","T",1)
+            menu.con.llamarTipoSensor("Temperatura","TH")
         elif opcion == "2":
-            menu.con.readSensor("US","UltraSonico","U",2)
+            menu.con.llamarTipoSensor("Ultrasonico","US")
         elif opcion == "3":
-            menu.con.readSensor("INFRA","Infrarrojo","I",)
+            menu.con.llamarTipoSensor("Infrarojo","INFRA")
         elif opcion == "4":
-            menu.con.readSensor("LUZ","Iluminacion","L",1)
+            menu.con.llamarTipoSensor("Luz","LUZ")
         elif opcion == "5":
-            menu.con.readSensor("LLUVIA","Lluvia","LL",1)
+            menu.con.llamarTipoSensor("Lluvia","LLUVIA")
         elif opcion == "6":
-            menu.con.readSensor("AGUA","Agua","A",1)
+            menu.con.llamarTipoSensor("Agua","AGUA")
         elif opcion == "7":
-            menu.con.readAllSensores()
+            menu.con.llamarTodosLosSensores("TODOS")
         elif opcion == "8":
             menu.menuTiemp()
         elif opcion == "9":
-            menu.menuUbicacion()
+            menu.menuSensores.menuSensores()
         elif opcion == "10":
             print("Salir")
             menu.con.cerrarConexion()

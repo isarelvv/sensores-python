@@ -15,8 +15,23 @@
         "descripcion": "Patio"
     },
     {
-        "tipo": "Temperatura",
-        "identificador": "T2",
-        "descripcion": "Cuarto"
+        "tipo":"Ultrasonico",
+        "identificador":"US1",
+        "descripcion":"Patio"
+    },
+    {
+        "tipo":"Ultrasonico",
+        "identificador":"US2",
+        "descripcion":"Patio"
+    },
+    {
+        "tipo":"Infrarojo",
+        "identificador":"I1",
+        "descripcion":"Patio"
+    },
+    {
+        "tipo":"Lluvia",
+        "identificador":"LLUVIA1",
+        "descripcion":"Patio"
     }
 ]

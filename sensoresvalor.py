@@ -25,7 +25,7 @@ class sensorValor(Lista):
             return arreglo
         else:
             key_list = ["sensor", "valor", "timestamp"]
-            value_list = [self.sensor, self.valor, self.timestamp]
+            value_list = [self.sensor.get_dict(), self.valor, self.timestamp]
             diccionario = dict(zip(key_list, value_list))
             return diccionario
         

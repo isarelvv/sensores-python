@@ -5,22 +5,23 @@ from sensores import sensor
 import msvcrt
 from mongodb import conexionMongo
 import pickle
+from sensoresvalor import sensorValor
 
 
-class conexionArduino:
+class conexionArduino(sensorValor):
 #INICILIAR LA CONEXION CON EL ARDUINO
     def __init__(self):
-        self.arduino = serial.Serial("COM4",9600)
-        self.mongo = conexionMongo("sensores")
-        self.sensores= [{"tipo": "Temperatura","Id" : "T1"},{"tipo": "UltraSonico","Id" : "US"},
-                        {"tipo": "Iluminacios","Id" : "LUZ1"},{"tipo": "Infrrarojo","Id" : "IR1"},
-                        {"tipo": "Lluvia","Id" : "LL1"},{"tipo": "Agua","Id" : "A1"}]
-        self.listaultra = ["cocina","baño"]
-        self.listatemp= ["sala"]
-        self.listalluvia = ["exterior"]
-        self.listainfrarojo = ["puerta"]
-        self.listaagua = ["recamara"]
-        self.listailuminacion = ["recamara"]
+        self.arduino = serial.Serial("COM3",9600)
+        self.listasensor = sensor().conversionlista()
+        self.listatemp = []
+        self.listaultra = []
+        self.listalluvia = []
+        self.listainfrarojo = []
+        self.listaagua = []
+        self.listailuminacion = []
+        self.cargarUbicaciones()
+        self.mongo = conexionMongo("valores")
+        
         
     def guardarUbicaciones(self):
         todas_las_ubicaciones = [self.listatemp,self.listaultra,self.listalluvia,self.listainfrarojo,self.listaagua,self.listailuminacion]
@@ -31,7 +32,56 @@ class conexionArduino:
         with open("ubicaciones.txt","rb") as archivo:
             todas_las_ubicaciones = pickle.load(archivo)
             self.listatemp,self.listaultra,self.listalluvia,self.listainfrarojo,self.listaagua,self.listailuminacion = todas_las_ubicaciones
-
+    def seleccionarSensor(self,tipo):
+        lista = []
+        for s in self.listasensor:
+            if s.tipo == tipo:
+                lista.append(s)
+        return lista
+    
+    def llamarTipoSensor(self,tipo,identificador):
+        lista = self.seleccionarSensor(tipo)
+        self.escribirArduino(identificador.encode("utf-8"))
+        while True:
+            for s in lista:
+                data = self.arduino.read_until()
+                sensornuevo = sensorValor(s,data.decode("utf-8").strip(),time.time())
+                print(sensornuevo)
+                self.mongo.insertarAMongo(sensornuevo.getDict())
+                print("Sensor agregado con exito")
+            if msvcrt.kbhit():
+                    break
+    def lecturaSensor(self,tipo):
+        lista = self.seleccionarSensor(tipo)
+        for s in lista:
+            ##SE LEE EL VALOR DEL ARDUINO
+            valor = self.arduino.read_until()
+            sensornuevo = sensorValor(s,valor.decode("utf-8").strip(),time.time())
+            print(sensornuevo)
+            self.mongo.insertarAMongo(sensornuevo)
+            print("Sensor agregado con exito")
+        print("Saliendo")
+            
+    def llamarTodosLosSensores(self,identificador):
+        self.escribirArduino(identificador.encode("utf-8"))
+        while True:
+            data2 = self.arduino.read_until()
+            datadecoded = data2.decode("utf-8").strip()
+            if "T" in datadecoded:
+                self.lecturaSensor("Temperatura")
+            elif "D" in datadecoded:
+                self.lecturaSensor("Ultrasonico")
+            elif "Recipiente" in datadecoded:
+                self.lecturaSensor("Infrarojo")
+            elif "Foco" in datadecoded:
+                self.lecturaSensor("Luz")
+            elif "Lluvia" in datadecoded:
+                self.lecturaSensor("Lluvia")
+            elif "Nivel" in datadecoded:
+                self.lecturaSensor("Agua")
+            if msvcrt.kbhit():
+                    break
+            
 #METODO PARA LEER LOS DATOS DEL ARDUINO
     def leerArduino(self):
         while(True):
@@ -74,7 +124,7 @@ class conexionArduino:
                 data2 = self.arduino.read_until()
                 sensor1 = sensor(tiposensor, identificadorsensor, data2.decode("utf-8").strip())
                 print(sensor1)
-                self.mongo.insertarAMongo(sensor1)
+                #self.mongo.insertarAMongo(sensor1)
             if msvcrt.kbhit():
                         break
 
@@ -133,8 +183,9 @@ class conexionArduino:
 
 if __name__ == "__main__":
     conexion = conexionArduino()
-    conexion.guardarUbicaciones()
-    conexion.cargarUbicaciones()
+    data2 = conexion.readSensor("TH","Temperatura","T",1)
+    print("hola")
+    print(data2)
 
 
             

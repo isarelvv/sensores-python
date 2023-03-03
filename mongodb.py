@@ -69,7 +69,7 @@ class conexionMongo(Conversion):
                 #LIMPIAR EL ARCHIVO SIN CONEXION
                 os.remove('sensoresOffline.json')
             self.guardarJSONTemporal(dict)
-            self.insertarDocumento(dict.get_dict())           
+            self.insertarDocumento(dict)           
         else:
             print("No se logro conectar con MongoDB, guardando localmente")
             self.guardarEnLocal(dict)

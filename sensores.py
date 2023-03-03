@@ -23,7 +23,7 @@ class sensor(Lista):
         if self.tamanho >=1 :
             arreglo = []
             for item in self.lista:
-                arreglo.append(item.get_dict())
+                arreglo.append(item)
             return arreglo
         else:
             key_list = ["tipo", "identificador", "descripcion"]
