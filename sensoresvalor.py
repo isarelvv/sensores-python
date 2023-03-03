@@ -17,22 +17,22 @@ class sensorValor(Lista):
     def getKeys(self):
         return self.id
     
-    def get_dict(self):
+    def get_dict2(self):
         if self.tamanho >=1 :
             arreglo = []
             for item in self.lista:
-                arreglo.append(item.get_dict())
+                arreglo.append(item)
             return arreglo
         else:
             return {'sensor': self.sensor.get_dict(),'valor':self.valor,'timestamp': self.timestamp}
         
     def conversionlista(self):
-        self.lista = []
-        li = self.leerjson('listadesensoresvalor')
+        self = []
+        li = self.leerjson('sensoresTemporales')
         for val in li:
             sensorvalor= sensorValor(val['sensor'], val['valor'],val['timestamp'])
             self.insere(sensorvalor)
-        return self.lista
+        return self
 
     
     def sendMongo(self,sensor):

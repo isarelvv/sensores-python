@@ -70,8 +70,9 @@ class conexionMongo(Conversion):
                 #self.coleccion.insert_many(docDesconectado)
                 #LIMPIAR EL ARCHIVO SIN CONEXION
                 os.remove('sensoresOffline.json')
+            
             self.guardarJSONTemporal(dict)
-            self.insertarDocumento(dict)           
+            self.insertarDocumento(dict)         
         else:
             print("No se logro conectar con MongoDB, guardando localmente")
             self.guardarEnLocal(dict)
@@ -80,16 +81,16 @@ class conexionMongo(Conversion):
 #METODO PARA GUARDAR SIN CONEXION
     def guardarEnLocal(self,data):
         self.listaoffline.insere(data)
-        self.guardarjson('sensoresOffline',self.listaoffline.get_dict())
+        self.guardarjson('sensoresOffline',self.listaoffline)
         
     
-    def guardarJSONTemporal(self,dict):
-        self.listatemporal.insere(dict)
-        self.guardarjson('sensoresTemporales',self.listatemporal.get_dict())
+    def guardarJSONTemporal(self,objeto):
+        self.listatemporal.insere(objeto)
+        self.guardarjson('sensoresTemporales',self.listatemporal.get_dict2())
 
     def eliminarJSONTemporal(self):
         while True:
-            self.listatemporal = sensores.sensor()
+            self.listatemporal = sensorValor()
             os.remove('sensoresTemporales.json')
 
     def crarArchivo(self):
@@ -107,6 +108,7 @@ class conexionMongo(Conversion):
         while not self.stop_event.is_set(): 
             time.sleep(self.tiempoespera)
             self.listatemporal = sensorValor()
+            
             os.remove("sensoresTemporales.json")
             self.crarArchivo()
             time.sleep(2)
